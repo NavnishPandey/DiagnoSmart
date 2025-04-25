@@ -1,0 +1,7 @@
+faker
+pandas
+numpy
+torch 
+langchain_community
+faiss-cpu
+langchain
