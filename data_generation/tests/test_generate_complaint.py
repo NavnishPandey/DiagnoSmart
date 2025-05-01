@@ -24,7 +24,9 @@ def test_generate_complaint_secondary_symptom_all_specialties():
     #Divides the text in two parts : ebfore and after the first and encountered
     #And takes only the second part
             after_and_part = complaint.lower().split("and", 1)[1]
-
+    #Search any sympom_keyword in after_and_part using regulare expressions to
+    #handle possible issues like special chars and then stores the ones found
+    #in the list matched_symptoms
             matched_symptoms = [
                 symptom.lower() for symptom in symptom_keywords
                 if re.search(r'\b' + re.escape(symptom.lower()) + r'\b', after_and_part)
@@ -52,3 +54,63 @@ def test_generate_complaint_contains_specialty_keywords_all():
 def test_generate_complaint_invalid_specialty():
     with pytest.raises(KeyError):
         generate_complaint("kjohiyfutd")
+
+#Test the generation of optional parts in a base complaint
+def test_generate_complaint_optional_components():
+    for spec in specialties:
+        found = {
+            "severity": False,
+            "temporal": False,
+            "secondary_symptom": False,
+            "procedure": False,
+            "age_gender": False,
+            "medical_history": False
+        }
+
+        # Execute several attempts, 5 for instance
+        for _ in range(5):
+            complaint, severity_level, is_chronic = generate_complaint(spec)
+            lower = complaint.lower()
+
+            # Check for severity
+            if any(sev in lower for sev in sum(severity_indicators.values(), [])):
+                found["severity"] = True
+
+            # Check for temporal expression
+            if re.search(r"\b(for|since|over|past)\b", lower):
+                found["temporal"] = True
+
+            # Check for secondary symptom (after "and")
+            if "and" in lower:
+                after_and = lower.split("and", 1)[1]
+                all_symptoms = specialties[spec]["primary_symptoms"] + specialties[spec].get("overlapping_symptoms", []) + specialties[spec].get("layman_terms", [])
+                if any(symptom.lower() in after_and for symptom in all_symptoms):
+                    found["secondary_symptom"] = True
+
+            # Check for procedure mention
+            if re.search(r"\bi had a (normal|inconclusive|abnormal|clear) .+ (last year|recently|a few months ago|in the past)\b", lower):
+                found["procedure"] = True
+
+            # Check for age and gender
+            if re.search(r"i'm a \d{2,3}-year-old (male|female)", lower):
+                found["age_gender"] = True
+
+            # Check for medical history
+            if "i have a history of" in lower:
+                found["medical_history"] = True
+
+            # Exit early if all parts found
+            if all(found.values()):
+                break
+
+        # Print which parts were found (optional)
+        print(f"{spec}: {found}")
+
+        # At least some optional content should appear in 5 tries
+        assert any(found.values()), f"No optional components found in complaints for specialty: {spec}"
+
+
+
+
+
+
