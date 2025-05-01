@@ -10,3 +10,8 @@ def test_typo_preserves_word_count():
     sentence = "This is a test"
     modified = introduce_typos(sentence, prob=0.5)
     assert len(sentence.split()) == len(modified.split())  # Should keep same word count
+
+def test_no_typo_when_prob_zero():
+    text = "Clean sentence with no typos"
+    modified = introduce_typos(text, prob=0.0)
+    assert text == modified
