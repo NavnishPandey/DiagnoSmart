@@ -274,6 +274,10 @@ Faker.seed(42)
 
 
 def introduce_typos(text, prob=0.1):
+    if not isinstance(text, str):
+        raise TypeError("Input 'text' must be a string.")
+    if not (0.0 <= prob <= 1.0):
+        raise ValueError("Probability must be between 0.0 and 1.0")
     words = text.split()
     for i in range(len(words)):
         if random.random() < prob and len(words[i]) > 3:
