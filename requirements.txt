@@ -5,3 +5,4 @@ torch
 langchain_community
 faiss-cpu
 langchain
+pytest

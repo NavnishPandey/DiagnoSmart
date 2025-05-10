@@ -273,7 +273,6 @@ fake = Faker()
 Faker.seed(42)
 
 
-
 def introduce_typos(text, prob=0.1):
     words = text.split()
     for i in range(len(words)):
