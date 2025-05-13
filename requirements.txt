@@ -8,3 +8,4 @@ langchain
 pytest
 torch
 scikit-learn
+tqdm
