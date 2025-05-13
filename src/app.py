@@ -1,9 +1,10 @@
 import torch
+import sys,os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from src.utils.preprocessor import prepare_data
 from src.models.multitask_model import MultiTargetAttentionModel
 from src.training.trainer import train_and_evaluate
 
-from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from sklearn.feature_extraction.text import TfidfVectorizer
 import pandas as pd
@@ -20,23 +21,33 @@ LEARNING_RATE = 0.001
 MODEL_PATH = 'medical_complaint_model.pt'
 
 # Load dataset
-df = pd.read_csv('DiagnoSmart/Dataset.csv')
+df = pd.read_csv(r'C:\Users\Alka\Documents\Projects_torun\DiagnoSmart/Dataset.csv')
 
 # Preprocess data
 X_train, X_test, y_train, y_test, tfidf, specialty_encoder, severity_encoder = prepare_data(df)
 
+# Assuming y_train is a NumPy array with three columns: [Specialty, Severity, Chronicity]
+y_train_spec = torch.tensor(y_train[:, 0]).long()  # Specialty
+y_train_sev = torch.tensor(y_train[:, 1]).long()    # Severity
+y_train_chr = torch.tensor(y_train[:, 2]).float()   # Chronicity (BCE expects float)
+
+y_test_spec = torch.tensor(y_test[:, 0]).long()
+y_test_sev = torch.tensor(y_test[:, 1]).long()
+y_test_chr = torch.tensor(y_test[:, 2]).float()
+
 # Create DataLoader
 train_loader = DataLoader(
-    TensorDataset(torch.tensor(X_train).float(), torch.tensor(y_train[0]), torch.tensor(y_train[1]), torch.tensor(y_train[2])),
+    TensorDataset(torch.tensor(X_train).float(), y_train_spec, y_train_sev, y_train_chr),
     batch_size=BATCH_SIZE,
     shuffle=True
 )
 
 val_loader = DataLoader(
-    TensorDataset(torch.tensor(X_test).float(), torch.tensor(y_test[0]), torch.tensor(y_test[1]), torch.tensor(y_test[2])),
+    TensorDataset(torch.tensor(X_test).float(), y_test_spec, y_test_sev, y_test_chr),
     batch_size=BATCH_SIZE,
     shuffle=False
 )
+
 
 # Check device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

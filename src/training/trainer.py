@@ -8,6 +8,10 @@ def train_epoch(model, dataloader, optimizer, device, loss_fns):
 
     for X, y_spec, y_sev, y_chr in tqdm(dataloader):
         X, y_spec, y_sev, y_chr = X.to(device), y_spec.to(device), y_sev.to(device), y_chr.to(device)
+
+        # Reshape y_chr to (batch_size, 1)
+        y_chr = y_chr.unsqueeze(1)  
+
         out_spec, out_sev, out_chr = model(X)
 
         loss = spec_loss_fn(out_spec, y_spec) + sev_loss_fn(out_sev, y_sev) + chr_loss_fn(out_chr, y_chr)
@@ -32,6 +36,10 @@ def validate(model, dataloader, device, loss_fns):
     with torch.no_grad():
         for X, y_spec, y_sev, y_chr in dataloader:
             X, y_spec, y_sev, y_chr = X.to(device), y_spec.to(device), y_sev.to(device), y_chr.to(device)
+
+            # Reshape y_chr to (batch_size, 1)
+            y_chr = y_chr.unsqueeze(1)  
+
             out_spec, out_sev, out_chr = model(X)
 
             loss = spec_loss_fn(out_spec, y_spec) + sev_loss_fn(out_sev, y_sev) + chr_loss_fn(out_chr, y_chr)
@@ -43,7 +51,7 @@ def validate(model, dataloader, device, loss_fns):
             chr_corr += ((out_chr > 0.5).float() == y_chr).sum().item()
 
     return total_loss / total, spec_corr / total, sev_corr / total, chr_corr / total
-
+    
 def train_and_evaluate(model, train_loader, val_loader, optimizer, loss_fns, n_epochs, early_stopping_patience, model_path, device):
     best_val_loss = float('inf')
     patience_counter = 0
