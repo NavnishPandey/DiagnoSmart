@@ -9,3 +9,9 @@ __pycache__/
 
 # Dataset
 Dataset.csv
+
+# models
+saved_models/
+
+# mlflow
+mlruns/
