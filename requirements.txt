@@ -9,3 +9,4 @@ pytest
 torch
 scikit-learn
 tqdm
+mlflow
