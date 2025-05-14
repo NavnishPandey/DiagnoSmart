@@ -51,7 +51,9 @@ def validate(model, dataloader, device, loss_fns):
 def train_and_evaluate(
     model, train_loader, val_loader, optimizer, loss_fns, n_epochs, early_stopping_patience, model_path, device, run_id
 ):
+    #To keep track of the best validation loss
     best_val_loss = float('inf')
+    #Counter used for early stopping
     patience_counter = 0
 
     # Outer loop for epochs
