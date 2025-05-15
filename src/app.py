@@ -17,10 +17,10 @@ import torch.optim as optim
 import torch.nn as nn
 
 # Configuration
-BATCH_SIZE = 64
+BATCH_SIZE = 256
 N_EPOCHS = 20
 EARLY_STOPPING = 5
-LEARNING_RATE = 0.1
+LEARNING_RATE = 0.01
 MODEL_PATH = 'saved_models/medical_complaint_model.pt'
 
 # Set MLflow Tracking URI and Experiment
