@@ -17,7 +17,7 @@ import torch.optim as optim
 import torch.nn as nn
 
 # Configuration
-BATCH_SIZE = 256
+BATCH_SIZE = 512
 N_EPOCHS = 20
 EARLY_STOPPING = 5
 LEARNING_RATE = 0.01
