@@ -56,6 +56,9 @@ def train_and_evaluate(
     #Counter used for early stopping
     patience_counter = 0
 
+    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', patience=3, factor=0.5)
+
+
     # Outer loop for epochs
     for epoch in range(1, n_epochs + 1):
         print(f"\nEpoch {epoch}/{n_epochs}")
@@ -70,6 +73,8 @@ def train_and_evaluate(
         val_loss, val_spec_acc, val_sev_acc, val_chr_acc = validate(
             model, val_loader, device, loss_fns
         )
+        
+        scheduler.step(val_loss)
 
         # Logging metrics to MLflow
         with mlflow.start_run(run_id=run_id, nested=True):
