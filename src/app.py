@@ -17,10 +17,10 @@ import torch.optim as optim
 import torch.nn as nn
 
 # Configuration
-BATCH_SIZE = 512
+BATCH_SIZE = 64
 N_EPOCHS = 20
 EARLY_STOPPING = 5
-LEARNING_RATE = 0.01
+LEARNING_RATE = 0.001
 MODEL_PATH = 'saved_models/medical_complaint_model.pt'
 
 # Set MLflow Tracking URI and Experiment
@@ -75,7 +75,7 @@ sev_loss_fn = nn.CrossEntropyLoss()
 chr_loss_fn = nn.BCELoss()
 loss_fns = (spec_loss_fn, sev_loss_fn, chr_loss_fn)
 
-optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
+optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE, weight_decay=1e-4)
 
 # Start MLflow Run
 with mlflow.start_run() as run:
