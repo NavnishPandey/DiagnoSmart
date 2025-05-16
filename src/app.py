@@ -103,9 +103,10 @@ with mlflow.start_run() as run:
     )
 
     # Save Encoders and Vectorizer
-    joblib.dump(tfidf, 'tfidf_vectorizer.pkl')
-    joblib.dump(specialty_encoder, 'specialty_encoder.pkl')
-    joblib.dump(severity_encoder, 'severity_encoder.pkl')
+    save_path = r"C:\Users\Alka\Documents\Projects_torun\DiagnoSmart\saved_models"
+    joblib.dump(tfidf, f'{save_path}\tfidf_vectorizer.pkl')
+    joblib.dump(specialty_encoder, f'{save_path}\specialty_encoder.pkl')
+    joblib.dump(severity_encoder, f'{save_path}\severity_encoder.pkl')
 
     # Log Encoders as Artifacts
     mlflow.log_artifact('tfidf_vectorizer.pkl')
