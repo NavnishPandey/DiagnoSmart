@@ -49,7 +49,7 @@ def validate(model, dataloader, device, loss_fns):
     return total_loss / total, spec_corr / total, sev_corr / total, chr_corr / total
 
 def train_and_evaluate(
-    model, train_loader, val_loader, optimizer, loss_fns, n_epochs, early_stopping_patience, model_path, device, run_id
+    model, train_loader, val_loader, optimizer, loss_fns, n_epochs, early_stopping_patience, model_path, device
 ):
     best_val_loss = float('inf')
     patience_counter = 0
@@ -69,17 +69,17 @@ def train_and_evaluate(
             model, val_loader, device, loss_fns
         )
 
-        # Logging metrics to MLflow
-        with mlflow.start_run(run_id=run_id, nested=True):
-            mlflow.log_metric("train_loss", train_loss, step=epoch)
-            mlflow.log_metric("train_spec_acc", train_spec_acc, step=epoch)
-            mlflow.log_metric("train_sev_acc", train_sev_acc, step=epoch)
-            mlflow.log_metric("train_chr_acc", train_chr_acc, step=epoch)
+        # # Logging metrics to MLflow
+        # with mlflow.start_run(run_id=run_id, nested=True):
+        #     mlflow.log_metric("train_loss", train_loss, step=epoch)
+        #     mlflow.log_metric("train_spec_acc", train_spec_acc, step=epoch)
+        #     mlflow.log_metric("train_sev_acc", train_sev_acc, step=epoch)
+        #     mlflow.log_metric("train_chr_acc", train_chr_acc, step=epoch)
 
-            mlflow.log_metric("val_loss", val_loss, step=epoch)
-            mlflow.log_metric("val_spec_acc", val_spec_acc, step=epoch)
-            mlflow.log_metric("val_sev_acc", val_sev_acc, step=epoch)
-            mlflow.log_metric("val_chr_acc", val_chr_acc, step=epoch)
+        #     mlflow.log_metric("val_loss", val_loss, step=epoch)
+        #     mlflow.log_metric("val_spec_acc", val_spec_acc, step=epoch)
+        #     mlflow.log_metric("val_sev_acc", val_sev_acc, step=epoch)
+        #     mlflow.log_metric("val_chr_acc", val_chr_acc, step=epoch)
 
         print(f"Train Loss: {train_loss:.4f}, Spec Acc: {train_spec_acc:.4f}, Sev Acc: {train_sev_acc:.4f}, Chr Acc: {train_chr_acc:.4f}")
         print(f"Val Loss: {val_loss:.4f}, Spec Acc: {val_spec_acc:.4f}, Sev Acc: {val_sev_acc:.4f}, Chr Acc: {val_chr_acc:.4f}")
@@ -91,9 +91,9 @@ def train_and_evaluate(
             torch.save(model.state_dict(), model_path)
             print(f"Model saved to {model_path}")
 
-            # Log model to MLflow
-            with mlflow.start_run(run_id=run_id, nested=True):
-                mlflow.pytorch.log_model(model, "best_model")
+            # # Log model to MLflow
+            # with mlflow.start_run(run_id=run_id, nested=True):
+            #     mlflow.pytorch.log_model(model, "best_model")
         else:
             patience_counter += 1
 
