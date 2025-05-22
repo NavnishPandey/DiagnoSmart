@@ -5,3 +5,13 @@ venv/
 # Ignore Python cache
 __pycache__/
 *.py[cod]
+.pytest_cache
+
+# Dataset
+Dataset.csv
+
+# models
+saved_models/
+
+# mlflow
+mlruns/
