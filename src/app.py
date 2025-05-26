@@ -1,3 +1,4 @@
+
 import torch
 import sys, os
 import mlflow
@@ -25,8 +26,8 @@ MODEL_PATH = 'saved_models/medical_complaint_model.pt'
 
 # Set MLflow Tracking URI and Experiment
 mlflow.set_tracking_uri("./mlruns")
-mlflow.set_experiment("DiagnoSmart1")
-experiment = mlflow.get_experiment_by_name("Diagnosmart1")
+mlflow.set_experiment("DiagnoSmart")
+experiment = mlflow.get_experiment_by_name("Diagnosmart")
 print(f"Experiment ID: {experiment.experiment_id}" if experiment else "Experiment not found")
 
 # Load dataset
@@ -98,7 +99,7 @@ with mlflow.start_run() as run:
         early_stopping_patience=EARLY_STOPPING,
         model_path=MODEL_PATH,
         device=device,
-        run_id=run_id  # Pass run_id to trainer.py
+        # run_id=run_id  # Pass run_id to trainer.py
     )
 
     # Save Encoders and Vectorizer
