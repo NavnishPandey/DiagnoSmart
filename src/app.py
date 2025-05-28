@@ -17,11 +17,13 @@ import joblib
 from torch.utils.data import DataLoader, TensorDataset
 import torch.optim as optim
 import torch.nn as nn
+from sklearn.utils.class_weight import compute_class_weight
+import numpy as np
 
 # Configuration
 BATCH_SIZE = 64
-N_EPOCHS = 20
-EARLY_STOPPING = 7
+N_EPOCHS = 40
+EARLY_STOPPING = 5
 LEARNING_RATE = 0.001
 MODEL_PATH = 'saved_models/medical_complaint_model.pt'
 
@@ -36,6 +38,19 @@ df = pd.read_csv('Dataset.csv')
 
 # Preprocess data
 X_train, X_test, y_train, y_test, embending_model, specialty_encoder, severity_encoder = prepare_data(df)
+
+# Compute class weights for specialty and severity
+specialty_weights = compute_class_weight(
+    class_weight='balanced',
+    classes=np.unique(y_train[:, 0]),
+    y=y_train[:, 0]
+)
+
+severity_weights = compute_class_weight(
+    class_weight='balanced',
+    classes=np.unique(y_train[:, 1]),
+    y=y_train[:, 1]
+)
 
 # Assuming y_train is a NumPy array with three columns: [Specialty, Severity, Chronicity]
 y_train_spec = torch.tensor(y_train[:, 0]).long()
@@ -72,9 +87,15 @@ model = MultiTargetAttentionModel(
 ).to(device)
 
 # Loss functions and optimizer
-spec_loss_fn = nn.CrossEntropyLoss()
-sev_loss_fn = nn.CrossEntropyLoss()
+# Convert weights to PyTorch tensors
+specialty_weights_tensor = torch.tensor(specialty_weights, dtype=torch.float).to(device)
+severity_weights_tensor = torch.tensor(severity_weights, dtype=torch.float).to(device)
+
+# Define loss functions with weights
+spec_loss_fn = nn.CrossEntropyLoss(weight=specialty_weights_tensor)
+sev_loss_fn = nn.CrossEntropyLoss(weight=severity_weights_tensor)
 chr_loss_fn = nn.BCELoss()
+
 loss_fns = (spec_loss_fn, sev_loss_fn, chr_loss_fn)
 
 optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE, weight_decay=1e-4)
