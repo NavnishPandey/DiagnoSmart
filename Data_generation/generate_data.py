@@ -302,36 +302,39 @@ specialties = {
     },
     "Emergency Medicine": {
         "common_complaints": [
-            "I have a headache because I was injured",
-            "I fell and now I can't move my arm",
-            "I was in a car accident and feel dizzy",
-            "I have chest pain and can't breathe",
-            "I was stung by a bee and my face is swelling",
-            "I think I broke something, it really hurts",
-            "I fainted at work and hit my head",
-            "I'm having really bad stomach pain out of nowhere",
-            "I overdosed and now feel strange",
-            "I got burned with hot water and the skin is peeling"
+            "I suffered a head trauma and now I'm confused and bleeding",
+            "I fell from a ladder and can't move my leg, it's severely swollen",
+            "My child collapsed suddenly and is unresponsive",
+            "I have a deep laceration on my forearm with heavy bleeding",
+            "After a car accident, I have chest pain and trouble breathing",
+            "I'm burning up with a high fever and can't stop shaking, went to the ER"
         ],
         "primary_symptoms": [
-            "trauma", "head injury", "laceration", "fracture", "burns",
-            "acute chest pain", "acute abdominal pain", "loss of consciousness",
-            "allergic reaction", "overdose", "dyspnea", "shock"
+            "severe trauma", "blunt force injury", "third-degree burns", "acute chest pain",
+            "acute abdominal pain", "sudden loss of consciousness",
+            "drug overdose", "severe dyspnea", "shock"
         ],
         "overlapping_symptoms": [
-            "pain", "dizziness", "confusion", "nausea", "fever", "bleeding",
-            "weakness", "numbness", "shortness of breath", "palpitations"
+            "intense pain", "dizziness with trauma", "confusion after injury", 
+            "persistent nausea post-impact", "high fever with chills", 
+            "uncontrolled bleeding", "sudden weakness", "loss of motor control",
+            "shortness of breath after accident", "irregular heartbeat"
         ],
         "procedures": [
-            "CT scan", "X-ray", "EKG", "wound suturing", "IV fluids",
-            "oxygen therapy", "emergency ultrasound", "toxicology screen"
+            "trauma protocol", "whole-body CT scan", "emergency resuscitation",
+            "ER complete blood panel", "fracture stabilization", 
+            "emergency IV fluids and oxygen therapy"
         ],
         "layman_terms": [
-            "I hit my head", "I can't move my leg", "something snapped",
-            "I got knocked out", "I think I broke it", "passed out", "hurts like crazy",
-            "swelling fast", "burned myself", "took too many pills"
+            "I smashed my head and now I’m bleeding", "I fell hard and can’t move my leg", 
+            "He just collapsed and won’t wake up", "cut won’t stop bleeding", 
+            "after the crash, my chest hurts and I can’t breathe", 
+            "I overdosed and feel faint", "burned badly cooking", 
+            "took a bad fall and blacked out", "can’t feel my legs after the accident",
+            "threw up and passed out from the fever"
         ]
-}
+
+    }
 
 }
 # Severity indicators
