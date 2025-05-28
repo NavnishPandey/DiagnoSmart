@@ -5,6 +5,7 @@ import mlflow
 import mlflow.pytorch
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from src.utils.preprocessor import prepare_data
 from src.models.multitask_model import MultiTargetAttentionModel
 from src.training.trainer import train_and_evaluate
@@ -34,7 +35,7 @@ print(f"Experiment ID: {experiment.experiment_id}" if experiment else "Experimen
 df = pd.read_csv('Dataset.csv')
 
 # Preprocess data
-X_train, X_test, y_train, y_test, tfidf, specialty_encoder, severity_encoder = prepare_data(df)
+X_train, X_test, y_train, y_test, embending_model, specialty_encoder, severity_encoder = prepare_data(df)
 
 # Assuming y_train is a NumPy array with three columns: [Specialty, Severity, Chronicity]
 y_train_spec = torch.tensor(y_train[:, 0]).long()
@@ -99,11 +100,10 @@ with mlflow.start_run() as run:
         early_stopping_patience=EARLY_STOPPING,
         model_path=MODEL_PATH,
         device=device,
-        # run_id=run_id  # Pass run_id to trainer.py
-    )
+        run_id=run_id      )
 
     # Save Encoders and Vectorizer
-    joblib.dump(tfidf, 'saved_models/tfidf_vectorizer.pkl')
+    joblib.dump(embending_model, 'saved_models/embending_model.pkl')
     joblib.dump(specialty_encoder, 'saved_models/specialty_encoder.pkl')
     joblib.dump(severity_encoder, 'saved_models/severity_encoder.pkl')
 
