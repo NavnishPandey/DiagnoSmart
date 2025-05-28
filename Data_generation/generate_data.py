@@ -224,7 +224,115 @@ specialties = {
                       "MMPI", "depression screening"],
         "layman_terms": ["nervous breakdown", "lost my spark", "racing thoughts",
                          "hearing things", "can't cope"]
-    }
+    },
+    "Hematology": {
+        "primary_symptoms": [
+            "anemia", "easy bruising", "bleeding", "petechiae", "fatigue",
+            "paleness", "clotting issues", "swollen lymph nodes"
+        ],
+        "overlapping_symptoms": [
+            "weakness", "dizziness", "shortness of breath", "fever", "night sweats"
+        ],
+        "procedures": [
+            "CBC", "bone marrow biopsy", "coagulation panel", "iron panel", "peripheral smear"
+        ],
+        "common_complaints": [
+            "I bruise very easily and don't know why",
+            "I'm constantly tired and pale",
+            "My gums bleed when I brush my teeth",
+            "I feel dizzy and short of breath with minimal activity",
+            "I have frequent nosebleeds"
+        ],
+        "layman_terms": [
+            "always tired", "bleed easily", "pale skin", "low blood", "random bruises"
+        ]
+    },
+    "Oncology": {
+        "primary_symptoms": [
+            "unintentional weight loss", "fatigue", "mass", "lymphadenopathy",
+            "pain", "night sweats", "bleeding", "persistent cough"
+        ],
+        "overlapping_symptoms": [
+            "fever", "appetite loss", "shortness of breath", "weakness"
+        ],
+        "procedures": [
+            "CT scan", "MRI", "biopsy", "tumor markers", "PET scan"
+        ],
+        "common_complaints": [
+            "I found a lump that won’t go away",
+            "I’ve lost a lot of weight without trying",
+            "I have night sweats and I feel weak",
+            "My fatigue is unbearable and it’s getting worse",
+            "My pain doesn’t respond to regular meds"
+        ],
+        "layman_terms": [
+            "lump", "something growing", "feels like cancer", "constant tiredness", "sick all the time"
+        ]
+    },
+    "Immunology_Infectious": {
+        "primary_symptoms": [
+            "hives", "itching", "runny nose", "sneezing", "wheezing",
+            "anaphylaxis", "eczema", "recurrent infections", "fever", "chills",
+            "night sweats", "rash", "swollen lymph nodes", "diarrhea", "persistent cough"
+        ],
+        "overlapping_symptoms": [
+            "fatigue", "nausea", "headache", "pain", "shortness of breath",
+            "redness", "swelling"
+        ],
+        "procedures": [
+            "allergy skin test", "IgE testing", "spirometry", "immunoglobulin levels",
+            "food challenge test", "blood culture", "serologic testing", "chest X-ray", "infectious disease panel"
+        ],
+        "common_complaints": [
+            "I break out in hives after I eat certain foods",
+            "I have constant sneezing and runny nose",
+            "My eyes itch terribly during spring",
+            "I get swelling and shortness of breath after bee stings",
+            "I have frequent infections",
+            "I’ve had a fever that won’t go away",
+            "I just got back from a trip and now I’m really sick",
+            "My wound looks infected",
+            "I’ve had diarrhea and vomiting for 5 days"
+        ],
+        "layman_terms": [
+            "allergic reaction", "can't breathe after eating", "puffy face",
+            "seasonal allergies", "itchy eyes", "won’t stop being sick",
+            "caught something", "weird infection", "travel bug", "bad fever"
+        ]
+    },
+    "Emergency Medicine": {
+        "common_complaints": [
+            "I have a headache because I was injured",
+            "I fell and now I can't move my arm",
+            "I was in a car accident and feel dizzy",
+            "I have chest pain and can't breathe",
+            "I was stung by a bee and my face is swelling",
+            "I think I broke something, it really hurts",
+            "I fainted at work and hit my head",
+            "I'm having really bad stomach pain out of nowhere",
+            "I overdosed and now feel strange",
+            "I got burned with hot water and the skin is peeling"
+        ],
+        "primary_symptoms": [
+            "trauma", "head injury", "laceration", "fracture", "burns",
+            "acute chest pain", "acute abdominal pain", "loss of consciousness",
+            "allergic reaction", "overdose", "dyspnea", "shock"
+        ],
+        "overlapping_symptoms": [
+            "pain", "dizziness", "confusion", "nausea", "fever", "bleeding",
+            "weakness", "numbness", "shortness of breath", "palpitations"
+        ],
+        "procedures": [
+            "CT scan", "X-ray", "EKG", "wound suturing", "IV fluids",
+            "oxygen therapy", "emergency ultrasound", "toxicology screen"
+        ],
+        "layman_terms": [
+            "I hit my head", "I can't move my leg", "something snapped",
+            "I got knocked out", "I think I broke it", "passed out", "hurts like crazy",
+            "swelling fast", "burned myself", "took too many pills"
+        ]
+}
+
 }
 # Severity indicators
 severity_indicators = {
