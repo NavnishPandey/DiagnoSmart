@@ -69,18 +69,12 @@ This system helps streamline clinical triage, saving time for healthcare provide
 
 ---
 
-## 📦 Saved Models & Artifacts
-
-```bash
-saved_models/
-├── Diagnosmart_model.pt         
-├── tfidf_vectorizer.pkl         
-├── specialty_encoder.pkl        
-├── severity_encoder.pkl         
-
 ## 📌 Future Enhancements
 
 - Add multilingual complaint processing
 - Expand symptom database
 - Integrate with EHR systems
-- Deploy via Docker or cloud services (e.g., Heroku, AWS)
+- Deploy via Docker or cloud services (e.g., Heroku, AWS)         
+
+
+
