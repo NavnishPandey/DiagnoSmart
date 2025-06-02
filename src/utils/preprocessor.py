@@ -55,7 +55,7 @@ def prepare_data(df):
     #Binary variable 'chronic' is converted to float
     # to ensure compatibility with the model
     y_chronicity = df['chronic'].astype(float).values  
-
+    
     # Combine targets
     y = np.vstack((y_specialty, y_severity, y_chronicity)).T
 
@@ -68,10 +68,10 @@ def prepare_data(df):
         stratify = None
     else:
         stratify = y_specialty
-
+    
     # Split data
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=42, stratify=stratify
+        texts, y, test_size=0.2, random_state=42, stratify=stratify
     )
 
     return X_train, X_test, y_train, y_test, embedding_model, specialty_encoder, severity_encoder

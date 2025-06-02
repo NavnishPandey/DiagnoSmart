@@ -121,7 +121,8 @@ with mlflow.start_run() as run:
         early_stopping_patience=EARLY_STOPPING,
         model_path=MODEL_PATH,
         device=device,
-        run_id=run_id      )
+        run_id=run_id 
+    )
 
     # Save Encoders and Vectorizer
     joblib.dump(embending_model, 'saved_models/embending_model.pkl')

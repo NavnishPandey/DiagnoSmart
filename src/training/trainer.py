@@ -96,6 +96,7 @@ def train_and_evaluate(
             best_val_loss = val_loss
             patience_counter = 0
             torch.save(model.state_dict(), model_path)
+            # torch.save(model, "model.pt")
             print(f"Model saved to {model_path}")
 
             # Log model to MLflow

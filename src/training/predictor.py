@@ -2,9 +2,11 @@ import torch
 import numpy as np
 
 def predict_medical_complaint(text, model, tfidf, specialty_enc, severity_enc, device):
+    print(model)
     model.eval()
+    print(text)
     X_new = torch.FloatTensor(tfidf.transform([text]).toarray()).to(device)
-
+    print(X_new)
     with torch.no_grad():
         spec_out, sev_out, chr_out = model(X_new)
         spec_label = specialty_enc.inverse_transform([np.argmax(spec_out.cpu().numpy())])[0]
