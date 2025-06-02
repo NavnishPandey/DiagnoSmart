@@ -22,7 +22,7 @@ BATCH_SIZE = 32
 N_EPOCHS = 20
 EARLY_STOPPING = 5
 LEARNING_RATE = 0.001
-MODEL_PATH = r'C:\Users\Alka\Documents\Projects_torun\DiagnoSmart\saved_models\Diagnosmart_model.pt'
+MODEL_PATH = r'C:\\Users\Alka\Documents\\Projects_torun\DiagnoSmart\saved_models\Diagnosmart_model.pt'
 
 # Set MLflow Tracking URI and Experiment
 mlflow.set_tracking_uri("./mlruns")
@@ -99,14 +99,14 @@ with mlflow.start_run() as run:
         early_stopping_patience=EARLY_STOPPING,
         model_path=MODEL_PATH,
         device=device,
-        # run_id=run_id  # Pass run_id to trainer.py
+        run_id=run_id 
     )
 
     # Save Encoders and Vectorizer
     save_path = r"C:\Users\Alka\Documents\Projects_torun\DiagnoSmart\saved_models"
-    joblib.dump(tfidf, f'{save_path}\tfidf_vectorizer.pkl')
-    joblib.dump(specialty_encoder, f'{save_path}\specialty_encoder.pkl')
-    joblib.dump(severity_encoder, f'{save_path}\severity_encoder.pkl')
+    joblib.dump(tfidf, f'{save_path}\\tfidf_vectorizer.pkl')
+    joblib.dump(specialty_encoder, f'{save_path}\\specialty_encoder.pkl')
+    joblib.dump(severity_encoder, f'{save_path}\\severity_encoder.pkl')
 
     # Log Encoders as Artifacts
     mlflow.log_artifact('tfidf_vectorizer.pkl')

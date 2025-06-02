@@ -1,4 +1,6 @@
 import torch.nn as nn
+import os, sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from models.attention import SelfAttention
 import torch 
 
