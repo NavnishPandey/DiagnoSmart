@@ -15,10 +15,13 @@ app = Flask(__name__)
 CORS(app)
 
 # File paths
-MODEL_PATH = r"C:\Users\Alka\Documents\Projects_torun\DiagnoSmart\saved_models\\Diagnosmart_model.pt"
-TFIDF_PATH = r"C:\Users\Alka\Documents\Projects_torun\DiagnoSmart\saved_models\\tfidf_vectorizer.pkl"
-SPECIALTY_ENCODER_PATH = r"C:\Users\Alka\Documents\Projects_torun\DiagnoSmart\saved_models\specialty_encoder.pkl"
-SEVERITY_ENCODER_PATH = r"C:\Users\Alka\Documents\Projects_torun\DiagnoSmart\saved_models\severity_encoder.pkl"
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Folder where the script is
+MODEL_PATH = os.path.join(BASE_DIR, "saved_models", "Diagnosmart_model.pt")
+TFIDF_PATH = os.path.join(BASE_DIR, "saved_models", "tfidf_vectorizer.pkl")
+SPECIALTY_ENCODER_PATH = os.path.join(BASE_DIR, "saved_models", "specialty_encoder.pkl")
+SEVERITY_ENCODER_PATH = os.path.join(BASE_DIR, "saved_models", "severity_encoder.pkl")
+
 
 # Device config
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
