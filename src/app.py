@@ -130,6 +130,6 @@ with mlflow.start_run() as run:
     joblib.dump(severity_encoder, 'saved_models/severity_encoder.pkl')
 
     # Log Encoders as Artifacts
-    mlflow.log_artifact('saved_models/tfidf_vectorizer.pkl')
+    mlflow.log_artifact('saved_models/embending_model.pkl')
     mlflow.log_artifact('saved_models/specialty_encoder.pkl')
     mlflow.log_artifact('Saved_models/severity_encoder.pkl')
