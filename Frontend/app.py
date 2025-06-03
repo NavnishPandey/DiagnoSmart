@@ -16,17 +16,22 @@ CORS(app)
 
 # File paths
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Folder where the script is
-MODEL_PATH = os.path.join(BASE_DIR, "saved_models", "Diagnosmart_model.pt")
-TFIDF_PATH = os.path.join(BASE_DIR, "saved_models", "tfidf_vectorizer.pkl")
-SPECIALTY_ENCODER_PATH = os.path.join(BASE_DIR, "saved_models", "specialty_encoder.pkl")
-SEVERITY_ENCODER_PATH = os.path.join(BASE_DIR, "saved_models", "severity_encoder.pkl")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__)) 
+ROOT_DIR = os.path.abspath(os.path.join(BASE_DIR, os.pardir)) # C:/.../ (one level up)
+
+MODEL_PATH = os.path.join(ROOT_DIR, "saved_models", "Diagnosmart_model.pt")
+TFIDF_PATH = os.path.join(ROOT_DIR, "saved_models", "tfidf_vectorizer.pkl")
+SPECIALTY_ENCODER_PATH = os.path.join(ROOT_DIR, "saved_models", "specialty_encoder.pkl")
+SEVERITY_ENCODER_PATH = os.path.join(ROOT_DIR, "saved_models", "severity_encoder.pkl")
+# MODEL_PATH = os.path.join(BASE_DIR, "saved_models", "Diagnosmart_model.pt")
+# TFIDF_PATH = os.path.join(BASE_DIR, "saved_models", "tfidf_vectorizer.pkl")
+# SPECIALTY_ENCODER_PATH = os.path.join(BASE_DIR, "saved_models", "specialty_encoder.pkl")
+# SEVERITY_ENCODER_PATH = os.path.join(BASE_DIR, "saved_models", "severity_encoder.pkl")
 
 
 # Device config
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")
-
 # Load vectorizer and encoders
 tfidf = joblib.load(TFIDF_PATH)
 specialty_enc = joblib.load(SPECIALTY_ENCODER_PATH)
