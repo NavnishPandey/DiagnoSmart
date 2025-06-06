@@ -224,7 +224,118 @@ specialties = {
                       "MMPI", "depression screening"],
         "layman_terms": ["nervous breakdown", "lost my spark", "racing thoughts",
                          "hearing things", "can't cope"]
+    },
+    "Hematology": {
+        "primary_symptoms": [
+            "anemia", "easy bruising", "bleeding", "petechiae", "fatigue",
+            "paleness", "clotting issues", "swollen lymph nodes"
+        ],
+        "overlapping_symptoms": [
+            "weakness", "dizziness", "shortness of breath", "fever", "night sweats"
+        ],
+        "procedures": [
+            "CBC", "bone marrow biopsy", "coagulation panel", "iron panel", "peripheral smear"
+        ],
+        "common_complaints": [
+            "I bruise very easily and don't know why",
+            "I'm constantly tired and pale",
+            "My gums bleed when I brush my teeth",
+            "I feel dizzy and short of breath with minimal activity",
+            "I have frequent nosebleeds"
+        ],
+        "layman_terms": [
+            "always tired", "bleed easily", "pale skin", "low blood", "random bruises"
+        ]
+    },
+    "Oncology": {
+        "primary_symptoms": [
+            "unintentional weight loss", "fatigue", "mass", "lymphadenopathy",
+            "pain", "night sweats", "bleeding", "persistent cough"
+        ],
+        "overlapping_symptoms": [
+            "fever", "appetite loss", "shortness of breath", "weakness"
+        ],
+        "procedures": [
+            "CT scan", "MRI", "biopsy", "tumor markers", "PET scan"
+        ],
+        "common_complaints": [
+            "I found a lump that won’t go away",
+            "I’ve lost a lot of weight without trying",
+            "I have night sweats and I feel weak",
+            "My fatigue is unbearable and it’s getting worse",
+            "My pain doesn’t respond to regular meds"
+        ],
+        "layman_terms": [
+            "lump", "something growing", "feels like cancer", "constant tiredness", "sick all the time"
+        ]
+    },
+    "Immunology_Infectious": {
+        "primary_symptoms": [
+            "hives", "itching", "runny nose", "sneezing", "wheezing",
+            "anaphylaxis", "eczema", "recurrent infections", "fever", "chills",
+            "night sweats", "rash", "swollen lymph nodes", "diarrhea", "persistent cough"
+        ],
+        "overlapping_symptoms": [
+            "fatigue", "nausea", "headache", "pain", "shortness of breath",
+            "redness", "swelling"
+        ],
+        "procedures": [
+            "allergy skin test", "IgE testing", "spirometry", "immunoglobulin levels",
+            "food challenge test", "blood culture", "serologic testing", "chest X-ray", "infectious disease panel"
+        ],
+        "common_complaints": [
+            "I break out in hives after I eat certain foods",
+            "I have constant sneezing and runny nose",
+            "My eyes itch terribly during spring",
+            "I get swelling and shortness of breath after bee stings",
+            "I have frequent infections",
+            "I’ve had a fever that won’t go away",
+            "I just got back from a trip and now I’m really sick",
+            "My wound looks infected",
+            "I’ve had diarrhea and vomiting for 5 days"
+        ],
+        "layman_terms": [
+            "allergic reaction", "can't breathe after eating", "puffy face",
+            "seasonal allergies", "itchy eyes", "won’t stop being sick",
+            "caught something", "weird infection", "travel bug", "bad fever"
+        ]
+    },
+    "Emergency Medicine": {
+        "common_complaints": [
+            "I suffered a head trauma and now I'm confused and bleeding",
+            "I fell from a ladder and can't move my leg, it's severely swollen",
+            "My child collapsed suddenly and is unresponsive",
+            "I have a deep laceration on my forearm with heavy bleeding",
+            "After a car accident, I have chest pain and trouble breathing",
+            "I'm burning up with a high fever and can't stop shaking, went to the ER"
+        ],
+        "primary_symptoms": [
+            "severe trauma", "blunt force injury", "third-degree burns", "acute chest pain",
+            "acute abdominal pain", "sudden loss of consciousness",
+            "drug overdose", "severe dyspnea", "shock"
+        ],
+        "overlapping_symptoms": [
+            "intense pain", "dizziness with trauma", "confusion after injury", 
+            "persistent nausea post-impact", "high fever with chills", 
+            "uncontrolled bleeding", "sudden weakness", "loss of motor control",
+            "shortness of breath after accident", "irregular heartbeat"
+        ],
+        "procedures": [
+            "trauma protocol", "whole-body CT scan", "emergency resuscitation",
+            "ER complete blood panel", "fracture stabilization", 
+            "emergency IV fluids and oxygen therapy"
+        ],
+        "layman_terms": [
+            "I smashed my head and now I’m bleeding", "I fell hard and can’t move my leg", 
+            "He just collapsed and won’t wake up", "cut won’t stop bleeding", 
+            "after the crash, my chest hurts and I can’t breathe", 
+            "I overdosed and feel faint", "burned badly cooking", 
+            "took a bad fall and blacked out", "can’t feel my legs after the accident",
+            "threw up and passed out from the fever"
+        ]
+
     }
+
 }
 # Severity indicators
 severity_indicators = {

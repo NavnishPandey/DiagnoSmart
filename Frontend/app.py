@@ -16,24 +16,29 @@ CORS(app)
 
 # File paths
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Folder where the script is
-MODEL_PATH = os.path.join(BASE_DIR, "saved_models", "Diagnosmart_model.pt")
-TFIDF_PATH = os.path.join(BASE_DIR, "saved_models", "tfidf_vectorizer.pkl")
-SPECIALTY_ENCODER_PATH = os.path.join(BASE_DIR, "saved_models", "specialty_encoder.pkl")
-SEVERITY_ENCODER_PATH = os.path.join(BASE_DIR, "saved_models", "severity_encoder.pkl")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__)) 
+ROOT_DIR = os.path.abspath(os.path.join(BASE_DIR, os.pardir)) # C:/.../ (one level up)
+
+MODEL_PATH = os.path.join(ROOT_DIR, "saved_models", "medical_complaint_model.pt")
+EMBENDING_PATH = os.path.join(ROOT_DIR, "saved_models", "embending_model.pkl")
+SPECIALTY_ENCODER_PATH = os.path.join(ROOT_DIR, "saved_models", "specialty_encoder.pkl")
+SEVERITY_ENCODER_PATH = os.path.join(ROOT_DIR, "saved_models", "severity_encoder.pkl")
+# MODEL_PATH = os.path.join(BASE_DIR, "saved_models", "Diagnosmart_model.pt")
+# TFIDF_PATH = os.path.join(BASE_DIR, "saved_models", "tfidf_vectorizer.pkl")
+# SPECIALTY_ENCODER_PATH = os.path.join(BASE_DIR, "saved_models", "specialty_encoder.pkl")
+# SEVERITY_ENCODER_PATH = os.path.join(BASE_DIR, "saved_models", "severity_encoder.pkl")
 
 
 # Device config
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")
-
 # Load vectorizer and encoders
-tfidf = joblib.load(TFIDF_PATH)
+sentence_transformer = joblib.load(EMBENDING_PATH)
 specialty_enc = joblib.load(SPECIALTY_ENCODER_PATH)
 severity_enc = joblib.load(SEVERITY_ENCODER_PATH)
 
 # Get model input dimensions
-input_dim = len(tfidf.get_feature_names_out())
+input_dim = len(sentence_transformer.get_feature_names_out())
 num_specialties = len(specialty_enc.classes_)
 num_severities = len(severity_enc.classes_)
 
@@ -63,7 +68,7 @@ def predict():
 
     try:
         prediction = predict_medical_complaint(
-            complaint, model, tfidf, specialty_enc, severity_enc, device
+            complaint, model, sentence_transformer, specialty_enc, severity_enc, device
         )
         print(prediction)
         return jsonify(prediction)
