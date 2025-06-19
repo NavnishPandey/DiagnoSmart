@@ -334,7 +334,37 @@ specialties = {
             "threw up and passed out from the fever"
         ]
 
+    },
+    "General_medicine": {
+        "primary_symptoms": [
+            "general discomfort", "fatigue", "lightheadedness", "low-grade fever", "vague headache",
+            "mild nausea", "loss of appetite", "non-specific pain", "night sweats", "paleness"
+        ],
+        "common_complaints": [
+            "I don't feel well", "I feel off", "I'm sick", "Something's wrong but I don't know what",
+            "I can't explain what's happening", "I've been feeling worse lately",
+            "It's probably nothing but I'm worried", "I hurt all over", "I have random aches",
+            "I don't feel like myself", "I feel weak and tired", "I have a low fever",
+            "I feel dizzy and lightheaded", "I have a headache that won't go away",
+            "I feel nauseous but I don't know why", "I haven't been eating well",
+            "I have headache"
+        ],
+        "procedures": [
+            "general check-up", "routine bloodwork", "annual physical",
+            "physical exam", "initial evaluation", "medical advice", "blood pressure check"
+        ],
+        "overlapping_symptoms": [
+            "headache", "back pain", "generic pain", "fever", "dizziness",
+            "leg pain", "muscle aches", "tightness", "nausea", "anxiety"
+        ],
+        "layman_terms" : [
+            "I feel sick", "I have a cold", "I think I'm coming down with something",
+            "I have a headache", "I feel weak", "I have a stomach ache",
+            "I feel feverish", "I have a sore throat", "I feel dizzy",
+            "I have body aches"
+        ]
     }
+
 
 }
 # Severity indicators
