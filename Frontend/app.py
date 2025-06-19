@@ -38,7 +38,9 @@ specialty_enc = joblib.load(SPECIALTY_ENCODER_PATH)
 severity_enc = joblib.load(SEVERITY_ENCODER_PATH)
 
 # Get model input dimensions
-input_dim = len(sentence_transformer.get_feature_names_out())
+dummy_sentence = ["This is a test sentence"]
+embedding = sentence_transformer.encode(dummy_sentence)
+input_dim = embedding.shape[1] if len(embedding.shape) > 1 else len(embedding)
 num_specialties = len(specialty_enc.classes_)
 num_severities = len(severity_enc.classes_)
 
