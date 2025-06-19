@@ -45,35 +45,27 @@ def prepare_data(df):
     # Preprocess the 'complaint' column
     texts = df['complaint'].astype(str).apply(preprocess_text)
 
-    # Sentence Transformer embeddings
-    X, embedding_model = prepare_embeddings(texts)
-
     # Encode targets
-    #Strings are converted to integers using LabelEncoder
     y_specialty, specialty_encoder = encode_labels(df, 'specialty')
     y_severity, severity_encoder = encode_labels(df, 'severity_level')
-    #Binary variable 'chronic' is converted to float
-    # to ensure compatibility with the model
-    y_chronicity = df['chronic'].astype(float).values  
-    
+    y_chronicity = df['chronic'].astype(float).values
+
     # Combine targets
     y = np.vstack((y_specialty, y_severity, y_chronicity)).T
 
-    # Check for stratify eligibility
-    # Ensure that each class in the specialty column has at least 2 samples
-    # to avoid issues with stratified splitting
+    # Stratified split (based on specialty, if possible)
     unique_classes, class_counts = np.unique(y_specialty, return_counts=True)
-    if np.any(class_counts < 2):
-        # If any class has less than 2 samples, avoid stratifying
-        stratify = None
-    else:
-        stratify = y_specialty
-    
-    # Split data
-    X_train, X_test, y_train, y_test = train_test_split(
+    stratify = y_specialty if np.all(class_counts >= 2) else None
+
+    X_train_texts, X_test_texts, y_train, y_test = train_test_split(
         texts, y, test_size=0.2, random_state=42, stratify=stratify
     )
 
-    return X_train, X_test, y_train, y_test, embedding_model, specialty_encoder, severity_encoder
+    # Compute embeddings only after split
+    model = SentenceTransformer('all-MiniLM-L6-v2')
+    X_train = model.encode(X_train_texts.tolist(), show_progress_bar=True)
+    X_test = model.encode(X_test_texts.tolist(), show_progress_bar=True)
+
+    return X_train, X_test, y_train, y_test, model, specialty_encoder, severity_encoder
 
 
