@@ -22,8 +22,8 @@ import numpy as np
 
 # Configuration
 BATCH_SIZE = 64
-N_EPOCHS = 20
-EARLY_STOPPING = 3
+N_EPOCHS = 40
+EARLY_STOPPING = 7
 LEARNING_RATE = 0.001
 MODEL_PATH = 'saved_models/medical_complaint_model.pt'
 
