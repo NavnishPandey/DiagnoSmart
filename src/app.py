@@ -22,8 +22,8 @@ import numpy as np
 
 # Configuration
 BATCH_SIZE = 64
-N_EPOCHS = 40
-EARLY_STOPPING = 7
+N_EPOCHS = 20
+EARLY_STOPPING = 3
 LEARNING_RATE = 0.001
 MODEL_PATH = 'saved_models/medical_complaint_model.pt'
 
@@ -38,7 +38,7 @@ df = pd.read_csv('Dataset.csv')
 
 # Preprocess data
 X_train, X_test, y_train, y_test, embending_model, specialty_encoder, severity_encoder = prepare_data(df)
-
+print(X_train)
 # Compute class weights for specialty and severity
 specialty_weights = compute_class_weight(
     class_weight='balanced',
