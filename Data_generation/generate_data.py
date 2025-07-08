@@ -241,10 +241,13 @@ specialties = {
             "I'm constantly tired and pale",
             "My gums bleed when I brush my teeth",
             "I feel dizzy and short of breath with minimal activity",
-            "I have frequent nosebleeds"
+            "I have frequent nosebleeds",
+            "I feel cold all the time",
+            "I get infections easily"
         ],
         "layman_terms": [
-            "always tired", "bleed easily", "pale skin", "low blood", "random bruises"
+            "always tired", "bleed easily", "pale skin", "low blood", "random bruises",
+            "blood problems", "blood not clotting", "easy bleeding"
         ]
     },
     "Oncology": {
@@ -347,7 +350,7 @@ specialties = {
             "I don't feel like myself", "I feel weak and tired", "I have a low fever",
             "I feel dizzy and lightheaded", "I have a headache that won't go away",
             "I feel nauseous but I don't know why", "I haven't been eating well",
-            "I have headache"
+            "I have a cough", "I have chills"
         ],
         "procedures": [
             "general check-up", "routine bloodwork", "annual physical",
@@ -357,21 +360,19 @@ specialties = {
             "headache", "back pain", "generic pain", "fever", "dizziness",
             "leg pain", "muscle aches", "tightness", "nausea", "anxiety"
         ],
-        "layman_terms" : [
+        "layman_terms": [
             "I feel sick", "I have a cold", "I think I'm coming down with something",
             "I have a headache", "I feel weak", "I have a stomach ache",
             "I feel feverish", "I have a sore throat", "I feel dizzy",
             "I have body aches"
         ]
     }
-
-
 }
 # Severity indicators
 severity_indicators = {
-    "low": ["mild", "slight", "minor", "a bit of", "somewhat", "occasionally"],
-    "moderate": ["moderate", "noticeable", "uncomfortable", "bothersome", "concerning", "frequent"],
-    "high": ["severe", "intense", "extreme", "debilitating", "excruciating", "constant", "unbearable"]
+    "low": ["mild", "slight", "minor", "a bit of", "somewhat"],
+    "moderate": ["moderate", "noticeable", "uncomfortable", "bothersome", "concerning"],
+    "high": ["severe", "intense", "extreme", "debilitating", "excruciating", "unbearable"]
 }
 
 # Temporal patterns
@@ -383,24 +384,21 @@ temporal_patterns = {
     "acute": ["sudden onset", "acute", "abrupt", "came on suddenly", "all of a sudden"]
 }
 
-modifiers = [
-    "no", "not sure if", "sometimes", "mostly", "occasional", "intermittent",
-    "frequent", "persistent", "no history of", "never had"
-]
-
-time_periods = [
-    "a few days", "about a week", "two weeks", "several weeks",
-    "a month", "several months", "about six months", "almost a year",
-    "the past couple days", "since last Tuesday", "on and off for weeks"
-]
+positive_modifiers = ["sometimes", "mostly", "occasional", "intermittent", "frequent", "persistent"]
+negative_modifiers = ["no", "not sure if", "no history of", "never had"]
 
 chronic_indicators = {
     True: ["for years", "since childhood", "chronic", "long-standing", "for as long as I can remember",
-           "for the past several years", "ongoing for over a year"],
+           "for the past several years", "ongoing for over a year","almost a year","several months", "about six months"],
     False: ["recent", "just started", "new", "started last week", "began recently",
-            "for the first time", "never happened before"]
+            "for the first time", "never happened before",  "a few days", "about a week", "two weeks", "several weeks",
+    "a month", "the past couple days", "since last Tuesday", "on and off for weeks"]
 }
 
+compatible_temporal_for_chronic = {
+    True: ["constant", "intermittent", "progressive", "cyclical"],
+    False: ["acute", "intermittent", "cyclical", "progressive"]
+}
 
 import pandas as pd
 import numpy as np
@@ -435,17 +433,24 @@ def generate_complaint(specialty):
     if random.random() < 0.6 and specialty_data["common_complaints"]:
         base_complaint = random.choice(specialty_data["common_complaints"])
     else:
-        if specialty == "Neurology":
-            main_symptom = random.choice(specialty_data["primary_symptoms"])
-        else:
+        # if specialty == "Neurology":
+        #     main_symptom = random.choice(specialty_data["primary_symptoms"])
+        # else:
+        #     symptom_pool = specialty_data["primary_symptoms"] + specialty_data["overlapping_symptoms"]
+        #     main_symptom = random.choice(symptom_pool)
+        # base_complaint = f"I have {main_symptom}"
+        if specialty_data["overlapping_symptoms"]:
             symptom_pool = specialty_data["primary_symptoms"] + specialty_data["overlapping_symptoms"]
-            main_symptom = random.choice(symptom_pool)
+        else:
+            symptom_pool = specialty_data["primary_symptoms"]
+        main_symptom = random.choice(symptom_pool)
         base_complaint = f"I have {main_symptom}"
 
     severity = random.choice(severity_indicators[severity_level])
-    temporal_type = random.choice(list(temporal_patterns.keys()))
+    #temporal_type = random.choice(list(temporal_patterns.keys()))
+    temporal_type = random.choice(compatible_temporal_for_chronic[is_chronic])
     temporal = random.choice(temporal_patterns[temporal_type])
-    time_period = random.choice(chronic_indicators[is_chronic] if is_chronic else time_periods)
+    time_period = random.choice(chronic_indicators[is_chronic])
 
     # Add severity
     if random.random() < 0.7:
@@ -463,8 +468,12 @@ def generate_complaint(specialty):
         second_symptom = random.choice(second_symptom_pool)
         if random.random() < 0.3 and specialty_data["layman_terms"]:
             second_symptom = random.choice(specialty_data["layman_terms"])
-        modifier = random.choice(modifiers)
-        base_complaint += f" and {modifier} {second_symptom}"
+        if random.random() < 0.8:
+            modifier = random.choice(positive_modifiers)
+            base_complaint += f" and {modifier} {second_symptom}"
+        else:
+            modifier = random.choice(negative_modifiers)
+            base_complaint += f", but {modifier} {second_symptom}"
 
     # Add procedure
     if random.random() < 0.4 and specialty_data["procedures"]:
