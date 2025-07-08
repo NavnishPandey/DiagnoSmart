@@ -429,75 +429,101 @@ def generate_complaint(specialty):
     severity_level = random.choice(["low", "moderate", "high"])
     is_chronic = random.choice([True, False])
 
-    # Choose main complaint
-    if random.random() < 0.6 and specialty_data["common_complaints"]:
-        base_complaint = random.choice(specialty_data["common_complaints"])
+    # Demographics
+    include_demographics = random.random() < 0.3
+    if include_demographics:
+        age = random.randint(18, 85)
+        gender = random.choice(["male", "female"])
+        demographics = f"I'm a {age}-year-old {gender}."
     else:
-        # if specialty == "Neurology":
-        #     main_symptom = random.choice(specialty_data["primary_symptoms"])
-        # else:
-        #     symptom_pool = specialty_data["primary_symptoms"] + specialty_data["overlapping_symptoms"]
-        #     main_symptom = random.choice(symptom_pool)
-        # base_complaint = f"I have {main_symptom}"
-        if specialty_data["overlapping_symptoms"]:
-            symptom_pool = specialty_data["primary_symptoms"] + specialty_data["overlapping_symptoms"]
-        else:
-            symptom_pool = specialty_data["primary_symptoms"]
+        demographics = ""
+
+    # Main symptom or complaint
+    if random.random() < 0.6 and specialty_data["common_complaints"]:
+        main_symptom = random.choice(specialty_data["common_complaints"])
+    else:
+        symptom_pool = specialty_data["primary_symptoms"] + specialty_data.get("overlapping_symptoms", [])
         main_symptom = random.choice(symptom_pool)
-        base_complaint = f"I have {main_symptom}"
 
     severity = random.choice(severity_indicators[severity_level])
-    #temporal_type = random.choice(list(temporal_patterns.keys()))
-    temporal_type = random.choice(compatible_temporal_for_chronic[is_chronic])
-    temporal = random.choice(temporal_patterns[temporal_type])
-    time_period = random.choice(chronic_indicators[is_chronic])
+    main_sentence = f"I have {severity} {main_symptom}"
 
-    # Add severity
-    if random.random() < 0.7:
-        base_complaint = f"I have {severity} {base_complaint.replace('I have ', '')}"
-
-    # Add temporal pattern
+    # Temporal expression
     if random.random() < 0.6:
-        if random.random() < 0.5:
-            base_complaint += f" that has been {temporal}"
-        base_complaint += f" for {time_period}"
+        temporal_type = random.choice(compatible_temporal_for_chronic[is_chronic])
+        temporal = random.choice(temporal_patterns[temporal_type])
+        time_period = random.choice(chronic_indicators[is_chronic])
+        temporal_sentence = f"It has been {temporal} for {time_period}."
+    else:
+        temporal_sentence = ""
 
-    # Add secondary symptom
+    # Secondary symptom
     if random.random() < 0.7:
         second_symptom_pool = specialty_data["primary_symptoms"] + specialty_data["overlapping_symptoms"]
         second_symptom = random.choice(second_symptom_pool)
         if random.random() < 0.3 and specialty_data["layman_terms"]:
             second_symptom = random.choice(specialty_data["layman_terms"])
-        if random.random() < 0.8:
-            modifier = random.choice(positive_modifiers)
-            base_complaint += f" and {modifier} {second_symptom}"
-        else:
-            modifier = random.choice(negative_modifiers)
-            base_complaint += f", but {modifier} {second_symptom}"
+        modifier = random.choice(positive_modifiers) if random.random() < 0.8 else random.choice(negative_modifiers)
+        connector = "and" if modifier in positive_modifiers else "but"
+        secondary_sentence = f"{connector.capitalize()} it's {modifier} {second_symptom}."
+    else:
+        secondary_sentence = ""
 
-    # Add procedure
+    # Procedure
     if random.random() < 0.4 and specialty_data["procedures"]:
         procedure = random.choice(specialty_data["procedures"])
         time_ref = random.choice(["last year", "recently", "a few months ago", "in the past"])
         result = random.choice(["normal", "inconclusive", "abnormal", "clear"])
-        base_complaint += f". I had a {result} {procedure} {time_ref}."
+        procedure_sentence = f"I had a {result} {procedure} {time_ref}."
+    else:
+        procedure_sentence = ""
 
-    # Add age and gender
-    if random.random() < 0.3:
-        age = random.randint(18, 85)
-        gender = random.choice(["male", "female"])
-        base_complaint = f"I'm a {age}-year-old {gender}. {base_complaint}"
-
-    # Add medical history
+    # Medical history
     if random.random() < 0.25:
-        conditions = ["diabetes", "high blood pressure", "asthma", "thyroid disorder"]
-        base_complaint += f" I have a history of {random.choice(conditions)}."
+        condition = random.choice(["diabetes", "high blood pressure", "asthma", "thyroid disorder"])
+        history_sentence = f"I have a history of {condition}."
+    else:
+        history_sentence = ""
 
-    # Add typos
+    # Combine all parts
+    full_text = " ".join(filter(None, [
+        demographics,
+        main_sentence + ".",
+        temporal_sentence,
+        secondary_sentence,
+        procedure_sentence,
+        history_sentence
+    ])).strip()
+
+    # Optional: Introduce typos
     if random.random() < 0.1:
-        base_complaint = introduce_typos(base_complaint)
+        full_text = introduce_typos(full_text)
 
-    return base_complaint, severity_level, is_chronic
+    return full_text, severity_level, is_chronic
+import re
+
+def light_postprocess(text):
+    # 1. Remove repeated "I have"
+    text = re.sub(r"\b(I have)\s+\1\b", r"\1", text)
+
+    # 2. Fix awkward sequences like "unbearable I see" → "unbearable. I see"
+    text = re.sub(r"(\b(?:severe|intense|unbearable|debilitating|noticeable|mild|sharp|chronic)\b)\s+(I\b)", r"\1. \2", text)
+
+    # 3. Remove repeated prepositions like "for for years"
+    text = re.sub(r"\bfor\s+for\b", "for", text)
+
+    # 4. Capitalize first letter if missing
+    if text and not text[0].isupper():
+        text = text[0].upper() + text[1:]
+
+    # 5. Remove excessive punctuation like "...."
+    text = re.sub(r"\.\.+", ".", text)
+
+    # 6. Clean up extra spaces
+    text = re.sub(r"\s{2,}", " ", text)
+
+    return text.strip()
+
 
 def generate_synthetic_dataset(n_samples=1000):
     data = []
@@ -507,6 +533,7 @@ def generate_synthetic_dataset(n_samples=1000):
     for specialty in specialties_list:
         for _ in range(samples_per_specialty):
             complaint, severity_level, is_chronic = generate_complaint(specialty)
+            complaint = light_postprocess(complaint)
             data.append({
                 "complaint": complaint,
                 "specialty": specialty,
