@@ -69,16 +69,20 @@ def prepare_data(df):
     y = np.vstack((y_specialty, y_severity, y_chronicity)).T
 
     # Stratified split (based on specialty, if possible)
-    unique_classes, class_counts = np.unique(y_specialty, return_counts=True)
+    _, class_counts = np.unique(y_specialty, return_counts=True)
     stratify = y_specialty if np.all(class_counts >= 2) else None
 
     X_train_texts, X_test_texts, y_train, y_test = train_test_split(
         texts, y, test_size=0.2, random_state=42, stratify=stratify
     )
 
-    # Compute embeddings only after split
+    # Load a pre-trained SentenceTransformer model to convert text into dense embeddings
     model = SentenceTransformer('all-MiniLM-L6-v2')
+
+    # Generate embeddings for the training texts (after splitting to prevent data leakage)
     X_train = model.encode(X_train_texts.tolist(), show_progress_bar=True)
+
+    # Generate embeddings for the test texts
     X_test = model.encode(X_test_texts.tolist(), show_progress_bar=True)
 
     return X_train, X_test, y_train, y_test, model, specialty_encoder, severity_encoder
