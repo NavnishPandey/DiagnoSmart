@@ -27,12 +27,26 @@ stop_words = set(stopwords.words('english'))
 
 
 def preprocess_text(text):
+    # Convert the input text to lowercase to standardize it
     text = text.lower()
+    
+    # Remove all digits from the text using a regular expression
     text = re.sub(r'\d+', '', text)
+    
+    # Remove all characters that are NOT word characters or whitespace
+    # This effectively removes punctuation and special characters
     text = re.sub(r'[^\w\s]', '', text)
+    
+    # Process the cleaned text with the spaCy NLP pipeline
     doc = nlp(text)
+    
+    # Lemmatize each token and filter out stopwords
+    # Lemmatization reduces words to their base or dictionary form
     tokens = [token.lemma_ for token in doc if token.lemma_ not in stop_words]
+    
+    # Join the filtered lemmas back into a single string separated by spaces
     return ' '.join(tokens)
+
 
 
 # Function to encode labels using LabelEncoder
