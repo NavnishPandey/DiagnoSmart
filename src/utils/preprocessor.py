@@ -16,14 +16,15 @@ from nltk.corpus import stopwords
 #     #Use the vectorizer to transform the texts and return the resulting matrix and the vectorizer
 #     return tfidf.fit_transform(texts).toarray(), tfidf
 
-def prepare_embeddings(texts):
-    model = SentenceTransformer('all-MiniLM-L6-v2')  
-    embeddings = model.encode(texts.tolist(), show_progress_bar=True)
-    return embeddings, model
-
+# Download the list of English stopwords from NLTK
 nltk.download('stopwords')
+
+# Load the small English model from spaCy for NLP tasks (tokenization, lemmatization, etc.)
 nlp = spacy.load("en_core_web_sm")
+
+# Create a set of English stopwords from NLTK's list for easy lookup during text preprocessing
 stop_words = set(stopwords.words('english'))
+
 
 def preprocess_text(text):
     text = text.lower()
