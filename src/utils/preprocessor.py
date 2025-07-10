@@ -68,23 +68,38 @@ def prepare_data(df):
     # Combine targets
     y = np.vstack((y_specialty, y_severity, y_chronicity)).T
 
-    # Stratified split (based on specialty, if possible)
+    # Stratify only if every class in specialty has at least 3 samples (needed for 3 splits)
     _, class_counts = np.unique(y_specialty, return_counts=True)
-    stratify = y_specialty if np.all(class_counts >= 2) else None
+    stratify = y_specialty if np.all(class_counts >= 3) else None
 
-    X_train_texts, X_test_texts, y_train, y_test = train_test_split(
-        texts, y, test_size=0.2, random_state=42, stratify=stratify
+    # First split train (70%) and temp (30%)
+    X_train_texts, X_temp_texts, y_train, y_temp = train_test_split(
+        texts, y, test_size=0.3, random_state=42, stratify=stratify
     )
 
-    # Load a pre-trained SentenceTransformer model to convert text into dense embeddings
+    # For temp (val + test), if stratify is None fallback to None (no stratification)
+    stratify_temp = None
+    if stratify is not None:
+        # Extract specialty from y_temp for stratification in val/test split
+        y_temp_specialty = y_temp[:, 0]
+        _, counts_temp = np.unique(y_temp_specialty, return_counts=True)
+        if np.all(counts_temp >= 2):
+            stratify_temp = y_temp_specialty
+
+    # Split temp into validation (15%) and test (15%)
+    X_val_texts, X_test_texts, y_val, y_test = train_test_split(
+        X_temp_texts, y_temp, test_size=0.5, random_state=42, stratify=stratify_temp
+    )
+
+    # Load SentenceTransformer model once here
     model = SentenceTransformer('all-MiniLM-L6-v2')
 
-    # Generate embeddings for the training texts (after splitting to prevent data leakage)
+    # Generate embeddings for train, val, test
     X_train = model.encode(X_train_texts.tolist(), show_progress_bar=True)
-
-    # Generate embeddings for the test texts
+    X_val = model.encode(X_val_texts.tolist(), show_progress_bar=True)
     X_test = model.encode(X_test_texts.tolist(), show_progress_bar=True)
 
-    return X_train, X_test, y_train, y_test, model, specialty_encoder, severity_encoder
+    return X_train, X_val, X_test, y_train, y_val, y_test, model, specialty_encoder, severity_encoder
+
 
 
