@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 
 class SelfAttention(nn.Module):
+    #hidden_dim is the dimension of the attention output
     def __init__(self, input_dim, hidden_dim, device):
         super(SelfAttention, self).__init__()
         
