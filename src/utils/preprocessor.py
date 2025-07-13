@@ -16,22 +16,37 @@ from nltk.corpus import stopwords
 #     #Use the vectorizer to transform the texts and return the resulting matrix and the vectorizer
 #     return tfidf.fit_transform(texts).toarray(), tfidf
 
-def prepare_embeddings(texts):
-    model = SentenceTransformer('all-MiniLM-L6-v2')  
-    embeddings = model.encode(texts.tolist(), show_progress_bar=True)
-    return embeddings, model
-
+# Download the list of English stopwords from NLTK
 nltk.download('stopwords')
+
+# Load the small English model from spaCy for NLP tasks (tokenization, lemmatization, etc.)
 nlp = spacy.load("en_core_web_sm")
+
+# Create a set of English stopwords from NLTK's list for easy lookup during text preprocessing
 stop_words = set(stopwords.words('english'))
 
+
 def preprocess_text(text):
+    # Convert the input text to lowercase to standardize it
     text = text.lower()
+    
+    # Remove all digits from the text using a regular expression
     text = re.sub(r'\d+', '', text)
+    
+    # Remove all characters that are NOT word characters or whitespace
+    # This effectively removes punctuation and special characters
     text = re.sub(r'[^\w\s]', '', text)
+    
+    # Process the cleaned text with the spaCy NLP pipeline
     doc = nlp(text)
+    
+    # Lemmatize each token and filter out stopwords
+    # Lemmatization reduces words to their base or dictionary form
     tokens = [token.lemma_ for token in doc if token.lemma_ not in stop_words]
+    
+    # Join the filtered lemmas back into a single string separated by spaces
     return ' '.join(tokens)
+
 
 
 # Function to encode labels using LabelEncoder
@@ -53,19 +68,38 @@ def prepare_data(df):
     # Combine targets
     y = np.vstack((y_specialty, y_severity, y_chronicity)).T
 
-    # Stratified split (based on specialty, if possible)
-    unique_classes, class_counts = np.unique(y_specialty, return_counts=True)
-    stratify = y_specialty if np.all(class_counts >= 2) else None
+    # Stratify only if every class in specialty has at least 3 samples (needed for 3 splits)
+    _, class_counts = np.unique(y_specialty, return_counts=True)
+    stratify = y_specialty if np.all(class_counts >= 3) else None
 
-    X_train_texts, X_test_texts, y_train, y_test = train_test_split(
-        texts, y, test_size=0.2, random_state=42, stratify=stratify
+    # First split train (70%) and temp (30%)
+    X_train_texts, X_temp_texts, y_train, y_temp = train_test_split(
+        texts, y, test_size=0.3, random_state=42, stratify=stratify
     )
 
-    # Compute embeddings only after split
+    # For temp (val + test), if stratify is None fallback to None (no stratification)
+    stratify_temp = None
+    if stratify is not None:
+        # Extract specialty from y_temp for stratification in val/test split
+        y_temp_specialty = y_temp[:, 0]
+        _, counts_temp = np.unique(y_temp_specialty, return_counts=True)
+        if np.all(counts_temp >= 2):
+            stratify_temp = y_temp_specialty
+
+    # Split temp into validation (15%) and test (15%)
+    X_val_texts, X_test_texts, y_val, y_test = train_test_split(
+        X_temp_texts, y_temp, test_size=0.5, random_state=42, stratify=stratify_temp
+    )
+
+    # Load SentenceTransformer model once here
     model = SentenceTransformer('all-MiniLM-L6-v2')
+
+    # Generate embeddings for train, val, test
     X_train = model.encode(X_train_texts.tolist(), show_progress_bar=True)
+    X_val = model.encode(X_val_texts.tolist(), show_progress_bar=True)
     X_test = model.encode(X_test_texts.tolist(), show_progress_bar=True)
 
-    return X_train, X_test, y_train, y_test, model, specialty_encoder, severity_encoder
+    return X_train, X_val, X_test, y_train, y_val, y_test, model, specialty_encoder, severity_encoder
+
 
 

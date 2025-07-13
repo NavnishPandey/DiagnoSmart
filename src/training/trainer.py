@@ -56,6 +56,7 @@ def train_and_evaluate(
     #Counter used for early stopping
     patience_counter = 0
 
+    #If the loss does not improve for this 3 consecutives epochs, learning rate will be reduced of 50%
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', patience=3, factor=0.5)
 
 
@@ -64,7 +65,10 @@ def train_and_evaluate(
         print(f"\nEpoch {epoch}/{n_epochs}")
 
         # Training
+
+        #Line for visualization of the training progress
         train_pbar = tqdm(train_loader, desc=f"Training - Epoch {epoch}/{n_epochs}", leave=True)
+
         train_loss, train_spec_acc, train_sev_acc, train_chr_acc = train_epoch(
             model, train_pbar, optimizer, device, loss_fns
         )
@@ -74,6 +78,7 @@ def train_and_evaluate(
             model, val_loader, device, loss_fns
         )
         
+        #Comunicate the validation loss to the scheduler
         scheduler.step(val_loss)
 
         # Logging metrics to MLflow
@@ -95,8 +100,8 @@ def train_and_evaluate(
         if val_loss < best_val_loss:
             best_val_loss = val_loss
             patience_counter = 0
+            # Save the best model hyperparameters
             torch.save(model.state_dict(), model_path)
-            # torch.save(model, "model.pt")
             print(f"Model saved to {model_path}")
 
             # Log model to MLflow
