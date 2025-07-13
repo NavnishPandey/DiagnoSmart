@@ -25,11 +25,11 @@ This system helps streamline clinical triage, saving time for healthcare provide
   - Lowercased
   - Tokenized
   - Cleaned of punctuation/special characters
-- TF-IDF Vectorization is used to convert text into numerical feature vectors using `TfidfVectorizer` from scikit-learn.
+- Sentence Transformer is used to convert text into numerical feature vectors.
 
 ### 🧠 Model Architecture
 
-- **Input**: TF-IDF vectorized text
+- **Input**: Embedding Words
 - **Shared Layers**:
   - Fully Connected Layers
   - **Custom Attention Layer** (defined in `attention.py`)
