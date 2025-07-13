@@ -44,15 +44,15 @@ def evaluate_test(model, test_loader, device):
             X_batch = X_batch.to(device)
             spec_pred, sev_pred, chr_pred = model(X_batch)
 
-            # Specialty and Severity: classificazione multi-classe → prendi argmax
+            # Specialty and Severity: multi-class classification → take argmax
             spec_pred_labels = torch.argmax(spec_pred, dim=1).cpu().numpy()
             sev_pred_labels = torch.argmax(sev_pred, dim=1).cpu().numpy()
 
-            # Chronicity: output probabilità, soglia 0.5 per binarizzare
+            # Chronicity: output probabilities, threshold 0.5 to binarize
             chr_pred_scores = chr_pred.cpu().numpy().flatten()
             chr_pred_labels = (chr_pred_scores > 0.5).astype(int)
 
-            # Accumula predizioni e labels
+            # Accumulate predictions and labels
             all_spec_preds.extend(spec_pred_labels)
             all_sev_preds.extend(sev_pred_labels)
             all_chr_preds.extend(chr_pred_labels)
@@ -61,17 +61,17 @@ def evaluate_test(model, test_loader, device):
             all_sev_labels.extend(sev.cpu().numpy())
             all_chr_labels.extend(chr.cpu().numpy().astype(int))  # assume 0/1 float
 
-    # Calcolo metriche
+    # Calculate metrics
     spec_acc = accuracy_score(all_spec_labels, all_spec_preds)
     sev_acc = accuracy_score(all_sev_labels, all_sev_preds)
 
-    # Per chronicity calcolo accuracy e AUC (se possibile)
+    # For chronicity calculate accuracy and AUC (if possible)
     chr_acc = accuracy_score(all_chr_labels, all_chr_preds)
 
     try:
         chr_auc = roc_auc_score(all_chr_labels, all_chr_preds)
     except ValueError:
-        # Caso in cui ci siano solo una classe
+        # Case where only one class is present
         chr_auc = None
 
     metrics = {
@@ -84,4 +84,3 @@ def evaluate_test(model, test_loader, device):
         metrics["test_chronicity_auc"] = chr_auc
 
     return metrics
-
