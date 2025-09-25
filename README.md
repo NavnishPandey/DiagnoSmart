@@ -52,7 +52,7 @@ This system helps streamline clinical triage, saving time for healthcare provide
   - Accuracy for each output
   - Classification reports
 - Model is saved as `Diagnosmart_model.pt`
-- Encoders for labels and TF-IDF vectorizer saved as `.pkl` files
+- Encoders for labels and sentence transformer saved as `.pkl` files
 
 ---
 
@@ -62,7 +62,7 @@ This system helps streamline clinical triage, saving time for healthcare provide
 - User inputs a complaint via a web form
 - The backend:
   - Preprocesses input
-  - Uses TF-IDF vectorizer
+  - Uses senetence transformer model for embedding
   - Loads and runs the model
   - Returns predicted specialty, severity, and chronicity
 - Frontend UI located in the `Frontend/` directory
